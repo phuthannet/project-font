@@ -27,7 +27,7 @@ export default async function Page() {
         <form className="space-y-6" action={formAction}>
           <div>
             <label
-              for="username"
+              htmlFor="username"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               Username
@@ -46,7 +46,7 @@ export default async function Page() {
 
           <div>
             <label
-              for="email"
+              htmlFor="email"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               Email address
@@ -66,7 +66,7 @@ export default async function Page() {
           <div>
             <div className="flex items-center justify-between">
               <label
-                for="password"
+                htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Password
@@ -87,7 +87,7 @@ export default async function Page() {
           <div>
             <div className="flex items-center justify-between">
               <label
-                for="confirmpassword"
+                htmlFor="confirmpassword"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Confirm Password
