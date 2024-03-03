@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import action from './action';
+import {actionModelStableDiffusion} from './action';
 import { Button, Input, Image, Spin } from "antd";
 import './page.css'
 
@@ -13,7 +13,7 @@ export default function Page() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const data = await action(inputText);
+      const data = await actionModelStableDiffusion(inputText);
       setImageData(data);
     } catch (error) {
       console.error('Error fetching data:', error);
