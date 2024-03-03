@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export default async function actionModelStableDiffusion(inputText) {
+export default async function actionModelanimagine(inputText) {
   try {
     const response = await axios.post(
-      'https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5',
+      'https://api-inference.huggingface.co/models/cagliostrolab/animagine-xl-3.0',
       { inputs: inputText },
       {
         headers: {
@@ -19,5 +19,4 @@ export default async function actionModelStableDiffusion(inputText) {
     throw new Error('Error fetching data:', error);
   }
 }
-
 

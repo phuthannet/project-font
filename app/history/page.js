@@ -1,10 +1,10 @@
 "use client";
 
-export default function page(){
-    return(
-    <div>
-        helle world
-    </div>
+export default function page() {
+    return (
+        <div>
+            helle world
+        </div>
     )
-    
+
 }
