@@ -1,9 +1,11 @@
+"use client";
 import axios from "axios";
-
-const fetchData = async () => {
+import { useState, useEffect, useTransition } from "react";
+import { updateHeartCount } from "./action";
+const fetchBlog = async () => {
   try {
     const res = await axios.get(
-      `${process.env.STRAPI_BASE_URL}/api/histories?populate=*`
+      `http://127.0.0.1:1337/api/histories?populate=*`
     );
     return res.data.data;
   } catch (error) {
@@ -11,9 +13,44 @@ const fetchData = async () => {
   }
 };
 
-export default async function Page() {
-  const datas = await fetchData();
+export default function Page() {
+  const [blogState, setBlogState] = useState([]);
+  const [heartCount, setheartCount] = useState();
 
+  const initBlog = async () => {
+    try {
+      const result = await fetchBlog();
+      setBlogState(result);
+      setheartCount(result.map(() => true));
+    } catch (error) {}
+  };
+
+  const handleHeartClick = async (index) => {
+    const updatedBlogState = [...blogState];
+    const updatedheartCount = [...heartCount];
+    if (!updatedheartCount[index]) {
+      updatedBlogState[index].attributes.heart++;
+      setBlogState(updatedBlogState);
+    } else {
+      updatedBlogState[index].attributes.heart--;
+      setBlogState(updatedBlogState);
+    }
+    const updateResult = await updateHeartCount(
+      updatedBlogState[index].id,
+      updatedBlogState[index].attributes.heart
+    );
+    if (updateResult === 200) {
+      console.log("true");
+      updatedheartCount[index] = !updatedheartCount[index];
+      setheartCount(updatedheartCount);
+    } else {
+      console.error("Error updating heart count on server");
+    }
+  };
+
+  useEffect(() => {
+    initBlog();
+  }, []);
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="container mx-auto max-w-7xl px-6 lg:px-8">
@@ -28,7 +65,7 @@ export default async function Page() {
           </p>
         </div>
         <div className="grid grid-cols-4 gap-2 mt-8">
-          {datas.map((datas, index) => (
+          {blogState.map((datas, index) => (
             <div key={index} className="flex flex-col cursor-pointer">
               <article className="flex max-w-xl flex-col items-start justify-between">
                 <div className="flex items-center gap-x-4 text-xs">
@@ -42,19 +79,22 @@ export default async function Page() {
                   </h3>
                   <img
                     className="mt-2"
-                    src={`${process.env.STRAPI_BASE_URL}${datas.attributes.image.data.attributes.formats.large.url}`}
+                    src={`http://127.0.0.1:1337${datas.attributes.image.data.attributes.formats.large.url}`}
                   />
                   <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">
                     {datas.attributes.description}
                   </p>
-                  <div className="heart">
-                    <button>
+                  <div className="grid grid-cols-12 gap-3">
+                    <button
+                      onClick={() => handleHeartClick(index)}
+                      className="flex flex-col"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
+                        fill={heartCount[index] ? "red" : "none"}
+                        stroke={heartCount[index] ? "red" : "currentColor"}
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
-                        stroke="currentColor"
                         className="w-6 h-6"
                         id={`heartIcon${index}`}
                       >
@@ -65,6 +105,7 @@ export default async function Page() {
                         />
                       </svg>
                     </button>
+                    <p>{datas.attributes.heart}</p>
                   </div>
                 </div>
                 <div className="relative mt-2 flex items-center gap-x-4">
