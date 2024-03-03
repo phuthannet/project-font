@@ -51,6 +51,7 @@ const fetchData = async () => {
   return (
     <div className="card">
       <header >
+        <h1>ANIMAGINE XL 3.0</h1>
         <div className="card-text">
         <Input type="text" value={inputText} onChange={handleInputChange} placeholder="Enter text" />
         <Button onClick={handleSubmit}>Submit</Button>
