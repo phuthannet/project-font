@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { updateHeartCount, getUserId, fetchBlog } from "./action";
-import { Alert, Space } from "antd";
+import { Alert, Space,Image } from "antd";
 
 export default function Page() {
   const [blogState, setBlogState] = useState([]);
@@ -14,7 +14,7 @@ export default function Page() {
     try {
       const result = await fetchBlog();
       const userId = await getUserId();
-      setUserFavId(result); 
+      setUserFavId(result);
       setBlogState(result);
       setUserId(userId);
       setheartCount(
@@ -37,7 +37,7 @@ export default function Page() {
       updatedBlogState[index].attributes.heart--;
       setBlogState(updatedBlogState);
     }
-    console.log(userFavId[index].attributes.usersFav.data); 
+    console.log(userFavId[index].attributes.usersFav.data);
     const updateResult = await updateHeartCount(
       updatedBlogState[index].id,
       updatedBlogState[index].attributes.heart,
@@ -55,6 +55,17 @@ export default function Page() {
   useEffect(() => {
     initBlog();
   }, []);
+
+  const handleSaveImageToDevice = (link) => {
+    if (imageUrl) { 
+      const link = document.createElement('a');
+      link.href = imageUrl;
+      link.download = 'result_image.jpg';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="container mx-auto max-w-7xl px-6 lg:px-8">
@@ -81,9 +92,9 @@ export default function Page() {
                   <h3 className="text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
                     {datas.attributes.prompt}
                   </h3>
-                  <img
+                  <Image
                     className="mt-2"
-                    src={`http://127.0.0.1:1337${datas.attributes.image.data.attributes.url}`}
+                    src={datas.attributes.image.data.attributes.url}
                   />
                   <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">
                     {datas.attributes.description}
