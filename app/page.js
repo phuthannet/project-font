@@ -2,10 +2,11 @@
 import axios from "axios";
 import { useState, useEffect, useTransition } from "react";
 import { updateHeartCount } from "./action";
+import {STRAPI_BASE_URL} from "./config/config";
 const fetchBlog = async () => {
   try {
     const res = await axios.get(
-      `http://127.0.0.1:1337/api/histories?populate=*`
+      (STRAPI_BASE_URL)+'/api/histories?populate=*',
     );
     return res.data.data;
   } catch (error) {
