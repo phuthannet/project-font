@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react"; 
+import { useState } from "react";
 import action from './action';
-import { Button , Input , Image , Spin } from "antd";
+import { Button, Input, Image, Spin } from "antd";
 import './page.css'
 
 export default function Page() {
@@ -10,10 +10,10 @@ export default function Page() {
   const [error, setError] = useState(null);
   const [imageUrl, setImageData] = useState(null); // เปลี่ยน imageData เป็น imageUrl
 
-const fetchData = async () => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-        const data = await action(inputText);
+      const data = await action(inputText);
       setImageData(data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -53,18 +53,18 @@ const fetchData = async () => {
       <header >
         <h1>stable-diffusion-v1-5 </h1>
         <div className="card-text">
-        <Input type="text" value={inputText} onChange={handleInputChange} placeholder="Enter text" />
-        <Button onClick={handleSubmit}>Submit</Button>
+          <Input type="text" value={inputText} onChange={handleInputChange} placeholder="Enter text" />
+          <Button onClick={handleSubmit}>Submit</Button>
         </div>
         <div className="gen-image">
-        {loading && <Spin></Spin>}
-        {error && <p>Error: {error.message}</p>}
-        {imageUrl && <Image src={imageUrl} width={"max-width"} height={"max-height"} />} {/* ใช้ <img> แทน Image จาก Next.js */}  
-        </div>    
+          {loading && <Spin></Spin>}
+          {error && <p>Error: {error.message}</p>}
+          {imageUrl && <Image src={imageUrl} width={"max-width"} height={"max-height"} />} {/* ใช้ <img> แทน Image จาก Next.js */}
+        </div>
         <div className="Button-saveimage">
-        <Button onClick={handleSaveImageToDevice}>Save Image</Button>
-        <Button onClick={handleShareImageUrl}>Share Image URL</Button>   
-            </div>   
+          <Button onClick={handleSaveImageToDevice}>Save Image</Button>
+          <Button onClick={handleShareImageUrl}>Share Image URL</Button>
+        </div>
       </header>
     </div>
   );

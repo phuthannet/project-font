@@ -1,25 +1,30 @@
-.card{
+.card {
     display: flex;
     justify-content: center;
-    
+
 }
-.card-text{
+
+.card-text {
     justify-content: center;
 }
-.card-text .ant-input{
+
+.card-text .ant-input {
     width: 500px;
 }
-.gen-image .ant-image{
+
+.gen-image .ant-image {
     display: flex;
     justify-content: flex-end;
     padding: 1%;
     height: 95%;
 }
-.Button-saveimage{
+
+.Button-saveimage {
     display: flex;
     justify-content: center;
 }
-.gen-image .ant-spin{
+
+.gen-image .ant-spin {
     display: flex;
     justify-content: center;
 }
