@@ -1,28 +1,30 @@
 "use client";
 import axios from "axios";
-import { useState, useEffect, useTransition } from "react";
-import { updateHeartCount } from "./action";
-const fetchBlog = async () => {
-  try {
-    const res = await axios.get(
-      `http://127.0.0.1:1337/api/histories?populate=*`
-    );
-    return res.data.data;
-  } catch (error) {
-    return error;
-  }
-};
+import { useState, useEffect } from "react";
+import { updateHeartCount, getUserId, fetchBlog } from "./action";
+import { Alert, Space } from "antd";
 
 export default function Page() {
   const [blogState, setBlogState] = useState([]);
   const [heartCount, setheartCount] = useState();
-
+  const [errorMessage, setErrorMessage] = useState();
+  const [userFavId, setUserFavId] = useState([]);
+  const [userId, setUserId] = useState([]);
   const initBlog = async () => {
     try {
       const result = await fetchBlog();
+      const userId = await getUserId();
+      setUserFavId(result); 
       setBlogState(result);
-      setheartCount(result.map(() => true));
-    } catch (error) {}
+      setUserId(userId);
+      setheartCount(
+        result.map((value) =>
+          value.attributes.usersFav.data.some((id) => id.id === userId)
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleHeartClick = async (index) => {
@@ -35,16 +37,18 @@ export default function Page() {
       updatedBlogState[index].attributes.heart--;
       setBlogState(updatedBlogState);
     }
+    console.log(userFavId[index].attributes.usersFav.data); 
     const updateResult = await updateHeartCount(
       updatedBlogState[index].id,
-      updatedBlogState[index].attributes.heart
+      updatedBlogState[index].attributes.heart,
+      userFavId[index].attributes.usersFav.data,
+      userId
     );
     if (updateResult === 200) {
-      console.log("true");
       updatedheartCount[index] = !updatedheartCount[index];
       setheartCount(updatedheartCount);
     } else {
-      console.error("Error updating heart count on server");
+      setErrorMessage(updateResult);
     }
   };
 
@@ -79,7 +83,7 @@ export default function Page() {
                   </h3>
                   <img
                     className="mt-2"
-                    src={`http://127.0.0.1:1337${datas.attributes.image.data.attributes.formats.large.url}`}
+                    src={datas.attributes.image.data.attributes.url}
                   />
                   <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">
                     {datas.attributes.description}
@@ -128,6 +132,24 @@ export default function Page() {
             </div>
           ))}
         </div>
+      </div>
+      <div className="fixed top-0 right-0 m-4">
+        {errorMessage && (
+          <Space
+            direction="vertical"
+            style={{
+              width: "100%",
+            }}
+          >
+            <Alert
+              message="Error"
+              description={errorMessage}
+              type="error"
+              showIcon
+              closable
+            />
+          </Space>
+        )}
       </div>
     </div>
   );

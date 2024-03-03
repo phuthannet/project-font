@@ -20,7 +20,6 @@ export async function login(prevState, formData) {
         password,
       }
     );
-    console.log(response);
     if (response.data.jwt) {
       cookies().set("token", response.data.jwt);
     }
