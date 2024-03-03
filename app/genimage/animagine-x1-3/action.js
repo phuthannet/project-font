@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async function actionModelanimagine(inputText) {
+export  async function actionModelanimagine(inputText) {
   try {
     const response = await axios.post(
       'https://api-inference.huggingface.co/models/cagliostrolab/animagine-xl-3.0',
@@ -19,4 +19,5 @@ export default async function actionModelanimagine(inputText) {
     throw new Error('Error fetching data:', error);
   }
 }
+
 

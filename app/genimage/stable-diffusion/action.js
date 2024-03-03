@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async function actionModelStableDiffusion(inputText) {
+export  async function actionModelStableDiffusion(inputText) {
   try {
     const response = await axios.post(
       'https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5',
@@ -19,4 +19,5 @@ export default async function actionModelStableDiffusion(inputText) {
     throw new Error('Error fetching data:', error);
   }
 }
+
 

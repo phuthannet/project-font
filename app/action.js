@@ -3,6 +3,7 @@
 import axios from "axios";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import {STRAPI_BASE_URL_CONFIG} from "./config/config"
 
 export async function updateHeartCount(id, heart, usersFav, userId) {
   try {
@@ -61,7 +62,7 @@ export async function updateHeartCount(id, heart, usersFav, userId) {
 export async function getUserId() {
   const token = cookies().get("token");
   try {
-    const response = await axios.get("https://favorable-dawn-95d99e7a24.strapiapp.com/api/users/me", {
+    const response = await axios.get((STRAPI_BASE_URL_CONFIG)+'/api/users/me', {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
@@ -77,7 +78,7 @@ export async function fetchBlog() {
   const token = cookies().get("token");
   try {
     const res = await axios.get(
-      `https://favorable-dawn-95d99e7a24.strapiapp.com/api/histories?populate=*`,
+      (STRAPI_BASE_URL_CONFIG +'/api/histories?populate=*'),
       {
         headers: {
           Authorization: `Bearer ${token.value}`,

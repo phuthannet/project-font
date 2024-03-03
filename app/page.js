@@ -83,7 +83,7 @@ export default function Page() {
                   </h3>
                   <img
                     className="mt-2"
-                    src={`http://127.0.0.1:1337${datas.attributes.image.data.attributes.url}`}
+                    src={`${datas.attributes.image.data.attributes.url}`}
                   />
                   <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">
                     {datas.attributes.description}
