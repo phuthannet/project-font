@@ -1,8 +1,7 @@
 "use client";
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { updateHeartCount, getUserId, fetchBlog } from "./action";
-import { Alert, Space } from "antd";
+import { Alert, Space , Input, Button} from "antd";
 
 export default function Page() {
   const [blogState, setBlogState] = useState([]);
@@ -10,6 +9,9 @@ export default function Page() {
   const [errorMessage, setErrorMessage] = useState();
   const [userFavId, setUserFavId] = useState([]);
   const [userId, setUserId] = useState([]);
+  const [inputText,setInputText] = useState('');
+  const [isClickHeart, setClickHeart] = useState(false);
+
   const initBlog = async () => {
     try {
       const result = await fetchBlog();
@@ -57,6 +59,10 @@ export default function Page() {
   }, []);
   return (
     <div className="bg-white py-24 sm:py-32">
+      <div className="Input-Post">
+        <Button type="primary">Post</Button>
+      <Input type="text" value={inputText} placeholder="Enter text" />
+      </div>
       <div className="container mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">

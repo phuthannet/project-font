@@ -16,7 +16,7 @@ export  async function actionModelStableDiffusion(inputText) {
     const imageUrl = URL.createObjectURL(new Blob([response.data], { type: 'image/jpeg' }));
     return imageUrl; // ส่งกลับ URL ของรูปภาพ
   } catch (error) {
-    throw new Error('Error fetching data:', error);
+    throw new Error('Error fetching data:server', error);
   }
 }
 

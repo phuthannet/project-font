@@ -31,6 +31,5 @@ export async function login(prevState, formData) {
     console.log(errorMessage);
     return { message: errorMessage || "Failed to create" };
   }
-
   redirect("/");
 }

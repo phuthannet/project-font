@@ -11,10 +11,13 @@ export async function register(prevState, formData) {
     const email = formData.get("email");
     const password = formData.get("password");
     const confirmPassword = formData.get("confirmpassword");
+    const profile = formData.get("profile");
+
 
     console.log("username", username);
     console.log("email", email);
     console.log("password", password);
+    comsole.log("profile" , profile)
     if (password !== confirmPassword) {
       throw {
         response: {

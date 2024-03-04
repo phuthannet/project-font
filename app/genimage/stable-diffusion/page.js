@@ -16,7 +16,7 @@ export default function Page() {
       const data = await actionModelStableDiffusion(inputText);
       setImageData(data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching data: client', error);
       setError(error);
     } finally {
       setLoading(false);
