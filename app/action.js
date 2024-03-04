@@ -3,11 +3,26 @@
 import axios from "axios";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import {STRAPI_BASE_URL_CONFIG} from "./config/config"
 
 export async function updateHeartCount(id, heart, usersFav, userId) {
   try {
     const token = cookies().get("token");
+    console.log("usersFav1", usersFav);
+    const userExists = usersFav.some((user) => user.id === userId);
+    if (userExists) {
+      usersFav = usersFav.filter((user) => user.id !== userId);
+    } else {
+      const newUser = {
+        id: userId,
+      };
+      usersFav.push(newUser);
+    }
+    const option = {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    };
+
     if (!token) {
       throw {
         response: {
@@ -25,48 +40,35 @@ export async function updateHeartCount(id, heart, usersFav, userId) {
       {
         data: {
           heart: heart,
-          usersFav: {
-            data: [
-              {
-                id: userId,
-              },
-            ],
-          },
+          usersFav: usersFav,
         },
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      }
+      option
     );
-    
+
     console.log(response.data.data.attributes.usersFav);
-    if (response.status === 200) {
-      console.log("update heart success");
-    } else {
-      console.log("update heart fail");
-    }
-    console.log(response.status);
     return response.status;
   } catch (error) {
     console.log(error);
-    // console.log(error.response.data.error.message);
-    // if (error.response.data.error.message === "Token not found in cookies") {
-    //   redirect("/login");
-    // }
-    // return { message: error.response.data.error.message || "Error" };
+    console.log(error.response.data.error.message);
+    if (error.response.data.error.message === "Token not found in cookies") {
+      redirect("/login");
+    }
+    return { message: error.response.data.error.message || "Error" };
   }
 }
 
 export async function getUserId() {
   const token = cookies().get("token");
   try {
-    const response = await axios.get((STRAPI_BASE_URL_CONFIG)+'/api/users/me', {
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-      },
-    });
+    const response = await axios.get(
+      `${process.env.STRAPI_BASE_URL}/api/users/me`,
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
+    );
     const { id } = response.data;
     return id;
   } catch (error) {
@@ -78,7 +80,7 @@ export async function fetchBlog() {
   const token = cookies().get("token");
   try {
     const res = await axios.get(
-      (STRAPI_BASE_URL_CONFIG +'/api/histories?populate=*'),
+      `${process.env.STRAPI_BASE_URL}/api/histories?populate=*`,
       {
         headers: {
           Authorization: `Bearer ${token.value}`,

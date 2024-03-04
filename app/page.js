@@ -16,7 +16,7 @@ export default function Page() {
     try {
       const result = await fetchBlog();
       const userId = await getUserId();
-      setUserFavId(result); 
+      setUserFavId(result);
       setBlogState(result);
       setUserId(userId);
       setheartCount(
@@ -39,17 +39,19 @@ export default function Page() {
       updatedBlogState[index].attributes.heart--;
       setBlogState(updatedBlogState);
     }
-    console.log(userFavId[index].attributes.usersFav.data); 
+ 
+    updatedheartCount[index] = !updatedheartCount[index];
+    setheartCount(updatedheartCount);
+
     const updateResult = await updateHeartCount(
       updatedBlogState[index].id,
       updatedBlogState[index].attributes.heart,
       userFavId[index].attributes.usersFav.data,
       userId
     );
-    if (updateResult === 200) {
+    if (updateResult != 200) {
       updatedheartCount[index] = !updatedheartCount[index];
       setheartCount(updatedheartCount);
-    } else {
       setErrorMessage(updateResult);
     }
   };
@@ -57,6 +59,31 @@ export default function Page() {
   useEffect(() => {
     initBlog();
   }, []);
+
+  const handleSaveImageToDevice = async (imageUrl, fileName) => {
+    console.log(imageUrl);
+    console.log(fileName);
+    if (imageUrl) {
+      try {
+        // Fetch the image data if imageUrl is not a direct link
+        if (!imageUrl.startsWith("http")) {
+          const response = await fetch(imageUrl);
+          const blob = await response.blob();
+          imageUrl = URL.createObjectURL(blob);
+        }
+
+        const link = document.createElement("a");
+        link.href = imageUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error("Error downloading image:", error);
+      }
+    }
+  };
+
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="Input-Post">
@@ -87,9 +114,9 @@ export default function Page() {
                   <h3 className="text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
                     {datas.attributes.prompt}
                   </h3>
-                  <img
+                  <Image
                     className="mt-2"
-                    src={`${datas.attributes.image.data.attributes.url}`}
+                    src={datas.attributes.image.data.attributes.url}
                   />
                   <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">
                     {datas.attributes.description}
@@ -115,7 +142,34 @@ export default function Page() {
                         />
                       </svg>
                     </button>
-                    <p>{datas.attributes.heart}</p>
+                    <div className="text-sm col-span-9">
+                      <p className="font-semibold ">{datas.attributes.heart}</p>
+                    </div>
+
+                    <button
+                      onClick={async () => {
+                        await handleSaveImageToDevice(
+                          datas.attributes.image.data.attributes.url,
+                          datas.attributes.image.data.attributes.name
+                        );
+                      }}
+                      className="flex flex-col"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    </button>
                   </div>
                 </div>
                 <div className="relative mt-2 flex items-center gap-x-4">
