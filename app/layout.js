@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./navbar/navbar";
-
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -15,11 +15,10 @@ export default function RootLayout({ children }) {
       <body>
         <header>
           <div>
-            <Navbar>
-            </Navbar>
+            <Navbar></Navbar>
           </div>
         </header>
-        {children}
+        <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>
   );

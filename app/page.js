@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { updateHeartCount, getUserId, fetchBlog } from "./action";
-import { Alert, Space , Input, Button} from "antd";
+import { Alert, Space, Input, Image, Button } from "antd";
 
 export default function Page() {
   const [blogState, setBlogState] = useState([]);
@@ -9,7 +9,7 @@ export default function Page() {
   const [errorMessage, setErrorMessage] = useState();
   const [userFavId, setUserFavId] = useState([]);
   const [userId, setUserId] = useState([]);
-  const [inputText,setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const [isClickHeart, setClickHeart] = useState(false);
 
   const initBlog = async () => {
@@ -39,7 +39,7 @@ export default function Page() {
       updatedBlogState[index].attributes.heart--;
       setBlogState(updatedBlogState);
     }
- 
+
     updatedheartCount[index] = !updatedheartCount[index];
     setheartCount(updatedheartCount);
 
@@ -88,7 +88,7 @@ export default function Page() {
     <div className="bg-white py-24 sm:py-32">
       <div className="Input-Post">
         <Button type="primary">Post</Button>
-      <Input type="text" value={inputText} placeholder="Enter text" />
+        <Input type="text" value={inputText} placeholder="Enter text" />
       </div>
       <div className="container mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
