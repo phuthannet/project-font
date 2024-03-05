@@ -76,27 +76,29 @@ export default function Page() {
   }, [currentPage]);
 
   const handleSaveImageToDevice = async (imageUrl, fileName) => {
-    console.log(imageUrl);
-    console.log(fileName);
-    if (imageUrl) {
-      try {
-        if (!imageUrl.startsWith("http")) {
-          const response = await fetch(imageUrl);
-          const blob = await response.blob();
-          imageUrl = URL.createObjectURL(blob);
-        }
+    if (imageUrl) { // ตรวจสอบว่ามี URL ของรูปภาพหรือไม่
+        try {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const objectUrl = URL.createObjectURL(blob);
 
-        const link = document.createElement("a");
-        link.href = imageUrl;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (error) {
-        console.error("Error downloading image:", error);
-      }
+            const link = document.createElement('a');
+            link.href = objectUrl;
+            link.download = fileName || 'result_image.jpg'; // ถ้าไม่ได้ระบุ fileName ให้ใช้ 'result_image.jpg' เป็นชื่อไฟล์
+            link.style.display = 'none'; // ซ่อนลิงก์
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // คืนค่า URL ที่สร้างขึ้น เมื่อไม่ต้องการใช้งานต่อ
+            URL.revokeObjectURL(objectUrl);
+        } catch (error) {
+            console.error("Error downloading image:", error);
+        }
+    } else {
+        console.error("No image URL provided.");
     }
-  };
+};
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

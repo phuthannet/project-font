@@ -120,8 +120,20 @@ export default function Page() {
     setDisableBtnUpdate(false);
   };
 
+  const dowLoadfile = async ()=>{
+    if (imageUrl) { // ตรวจสอบว่ามี URL ของรูปภาพหรือไม่
+      const link = document.createElement('a');
+      link.href = imageUrl;
+      link.download = 'result_image.jpg';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+
   const handleUpload = async () => {
     setDisableBtnUpdate(true);
+    dowLoadfile();
     blobUrlToFile(imageUrl).then(async (file) => {
       if (file) {
         const user = await getUser();
@@ -176,6 +188,7 @@ export default function Page() {
     }
   };
 
+ 
   useEffect(() => {
     let timeoutId;
 
@@ -281,7 +294,18 @@ export default function Page() {
                 disabled={disableBtnUpdate}
                 className="flex w-full justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
               >
-                Upload and Post Image
+                Post Image
+              </button>
+            )}
+          </div>
+          <div>
+          {imageUrl && (
+              <button
+                onClick={handleUpload}
+                disabled={disableBtnUpdate}
+                className="flex w-full justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              >
+                Download Image
               </button>
             )}
           </div>
