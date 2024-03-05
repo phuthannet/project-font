@@ -76,18 +76,19 @@ export async function getUserId() {
   }
 }
 
-export async function fetchDatas() {
+export async function fetchDatas(page) {
   const token = cookies().get("token");
   try {
     const res = await axios.get(
-      `${process.env.STRAPI_BASE_URL}/api/histories?populate[0]=image&populate[1]=usersFav&populate[2]=createBy.profile&sort[0]=createdAt:desc`,
+      `${process.env.STRAPI_BASE_URL}/api/histories?populate[0]=image&populate[1]=usersFav&populate[2]=createBy.profile&sort[0]=createdAt:desc&pagination[page]=${page}&pagination[pageSize]=12`,
       {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
       }
     );
-    return res.data.data;
+
+    return res.data;
   } catch (error) {
     return error;
   }

@@ -33,22 +33,24 @@ const Navbar = () => {
           </a>
         </div>
         <div className="hidden md:flex">
-          <p className="text-white font-bold text-lg">{userName}</p>
-          <Space>
-            <a
-              href="/user"
-              className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
-            >
-              <UserOutlined />
-            </a>
-          </Space>
           {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-red-600"
-            >
-              Logout
-            </button>
+            <>
+              <p className="text-white font-bold text-lg">{userName}</p>
+              <Space>
+                <a
+                  href="/user"
+                  className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
+                >
+                  <UserOutlined />
+                </a>
+              </Space>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </>
           ) : (
             <div>
               <a
