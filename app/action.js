@@ -80,13 +80,14 @@ export async function fetchDatas() {
   const token = cookies().get("token");
   try {
     const res = await axios.get(
-      `${process.env.STRAPI_BASE_URL}/api/histories?populate=*&sort[0]=createdAt:desc`,
+      `${process.env.STRAPI_BASE_URL}/api/histories?populate[0]=image&populate[1]=usersFav&populate[2]=createBy.profile&sort[0]=createdAt:desc`,
       {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
       }
     );
+    console.log(res.data.data);
     return res.data.data;
   } catch (error) {
     return error;
