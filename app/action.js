@@ -87,7 +87,6 @@ export async function fetchDatas() {
         },
       }
     );
-    console.log(res.data.data);
     return res.data.data;
   } catch (error) {
     return error;
