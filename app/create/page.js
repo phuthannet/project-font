@@ -16,7 +16,7 @@ const optionsModels = [
 async function getUser() {
   const token = Cookies.get("token");
   if (!token) {
-    alert("Please login");
+    return "Please login for upload";
   } else {
     try {
       const user = await axios.get(
@@ -144,18 +144,19 @@ export default function Page() {
     blobUrlToFile(imageUrl).then(async (file) => {
       if (file) {
         const user = await getUser();
+        if (user === "Please login for upload") {
+          setDisableBtnUpdate(false);
+          setErrorMessage(user);
+          throw "Please login for upload";
+        }
         const formData = new FormData();
         formData.append("files.image", file);
-        if (!user) {
-          setDisableBtnUpdate(false);
-          throw "User Not Found";
-        }
         formData.append(
           "data",
           JSON.stringify({
             prompt: prompt,
             description: description,
-            createBy: user.data.id,
+            createBy: user?.data?.id,
             model: model,
           })
         );
