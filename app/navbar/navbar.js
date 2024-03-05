@@ -59,6 +59,7 @@ const Navbar = () => {
               </a>
             </div>
           )}
+        </div>
         <div className="md:hidden">
           <button className="text-gray-300 hover:text-white focus:outline-none">
             <svg
