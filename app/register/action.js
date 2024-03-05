@@ -30,17 +30,11 @@ export async function register(prevState, formData) {
         password,
       }
     );
-
-    if (response.data.jwt) {
-      console.log("Register Success");
-    }
   } catch (error) {
-    console.log(error);
     let errorMessage = "";
     if (error.response && error.response.data.error.message) {
       errorMessage = error.response.data.error.message;
     }
-    console.log(errorMessage);
     return { message: errorMessage || "Failed to create" };
   }
   redirect("/login");

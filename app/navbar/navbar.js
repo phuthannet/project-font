@@ -1,26 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { UserOutlined } from "@ant-design/icons";
 import { Space } from "antd";
-const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
-
-  useEffect(() => {
-    const token = Cookies.get("token");
-    const username = Cookies.get("userName");
-    setUserName(username);
-    setIsLoggedIn(!!token);
-  }, isLoggedIn);
-
-  const handleLogout = () => {
-    Cookies.remove("token");
-    Cookies.remove("userName");
-    setUserName("");
-    setIsLoggedIn(false);
-  };
-
+const Navbar = ({ isLoggedIn, userName, handleLogout }) => {
   return (
     <nav className="bg-indigo-800 p-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -33,7 +14,7 @@ const Navbar = () => {
           </a>
         </div>
         <div className="hidden md:flex">
-          {isLoggedIn ? (
+          {isLoggedIn &&(
             <>
               <p className="text-white font-bold text-lg">{userName}</p>
               <Space>
@@ -51,21 +32,6 @@ const Navbar = () => {
                 Logout
               </button>
             </>
-          ) : (
-            <div>
-              <a
-                href="/login"
-                className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
-              >
-                Login
-              </a>
-              <a
-                href="/register"
-                className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
-              >
-                Sign Up
-              </a>
-            </div>
           )}
         </div>
         <div className="md:hidden">

@@ -1,10 +1,10 @@
 "use client";
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import UploadAvatar from "./UploadAvatar";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Typography } from "antd";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import UploadAvatar from "./UploadAvatar";
 
 const { Paragraph } = Typography;
 
@@ -15,7 +15,6 @@ const Profile = () => {
 
   useEffect(() => {
     const getProfileData = async () => {
-      console.log(token);
       try {
         const { data } = await axios.get(
           `https://favorable-dawn-95d99e7a24.strapiapp.com/api/users/me?populate=*`,
@@ -26,11 +25,8 @@ const Profile = () => {
           }
         );
         setUser(data);
-        console.log(data);
         setIsUserUpdated(false);
-      } catch (error) {
-        console.log({ error });
-      }
+      } catch (error) {}
     };
     getProfileData();
   }, [isUserUpdated]);

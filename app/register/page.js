@@ -3,7 +3,7 @@
 import { useFormState } from "react-dom";
 import { register } from "./action";
 
-export default async function Page() {
+export default function Page() {
   const initialState = {
     message: null,
   };

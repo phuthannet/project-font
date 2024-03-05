@@ -1,13 +1,12 @@
 "use server";
 
 import axios from "axios";
-import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function updateHeartCount(id, heart, usersFav, userId) {
   try {
     const token = cookies().get("token");
-    console.log("usersFav1", usersFav);
     const userExists = usersFav.some((user) => user.id === userId);
     if (userExists) {
       usersFav = usersFav.filter((user) => user.id !== userId);
@@ -46,11 +45,8 @@ export async function updateHeartCount(id, heart, usersFav, userId) {
       option
     );
 
-    console.log(response.data.data.attributes.usersFav);
     return response.status;
   } catch (error) {
-    console.log(error);
-    console.log(error.response.data.error.message);
     if (error.response.data.error.message === "Token not found in cookies") {
       redirect("/login");
     }
@@ -78,6 +74,9 @@ export async function getUserId() {
 
 export async function fetchDatas(page) {
   const token = cookies().get("token");
+  if (!token) {
+    redirect("/login");
+  }
   try {
     const res = await axios.get(
       `${process.env.STRAPI_BASE_URL}/api/histories?populate[0]=image&populate[1]=usersFav&populate[2]=createBy.profile&sort[0]=createdAt:desc&pagination[page]=${page}&pagination[pageSize]=12`,
@@ -87,9 +86,25 @@ export async function fetchDatas(page) {
         },
       }
     );
-
     return res.data;
   } catch (error) {
     return error;
   }
+}
+
+export async function updateLoginStatus() {
+  const token = cookies().get("token");
+  const username = cookies().get("userName");
+  try {
+    let res;
+    if (token && username) {
+      res = { token: token.value, username: username.value };
+    }
+    return res;
+  } catch (error) {
+    return error;
+  }
+}
+export async function checkOut() {
+  redirect("/login");
 }

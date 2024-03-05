@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { useState, useEffect } from "react";
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const [startPage, setStartPage] = useState(1);
   const maxPages = 5;
