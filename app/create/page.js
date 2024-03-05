@@ -13,6 +13,23 @@ const optionsModels = [
     value: "Stable-Diffusion",
   },
 ];
+async function getUser() {
+  const token = Cookies.get("token");
+  try {
+    const user = await axios.get(
+      "https://favorable-dawn-95d99e7a24.strapiapp.com/api/users/me?populate=*",
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      }
+    );
+    console.log(user);
+    return user;
+  } catch (error) {
+    return error;
+  }
+}
 async function create(prompt, model) {
   try {
     let response;
@@ -107,15 +124,15 @@ export default function Page() {
     setDisableBtnUpdate(true);
     blobUrlToFile(imageUrl).then(async (file) => {
       if (file) {
+        const user = await getUser();
         const formData = new FormData();
-        const username = Cookies.get("userName");
         formData.append("files.image", file);
         formData.append(
           "data",
           JSON.stringify({
             prompt: prompt,
             description: description,
-            createBy: username,
+            createBy: user.data.id,
             model: model,
           })
         );
