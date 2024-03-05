@@ -92,19 +92,4 @@ export async function fetchDatas(page) {
   }
 }
 
-export async function updateLoginStatus() {
-  const token = cookies().get("token");
-  const username = cookies().get("userName");
-  try {
-    let res;
-    if (token && username) {
-      res = { token: token.value, username: username.value };
-    }
-    return res;
-  } catch (error) {
-    return error;
-  }
-}
-export async function checkOut() {
-  redirect("/login");
-}
+
