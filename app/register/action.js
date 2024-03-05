@@ -32,7 +32,7 @@ export async function register(prevState, formData) {
     );
 
     if (response.data.jwt) {
-      cookies().set("token", response.data.jwt);
+      console.log("Register Success");
     }
   } catch (error) {
     console.log(error);

@@ -2,14 +2,15 @@
 import axios from "axios";
 import { Image, Input, Radio, Spin, Space, Alert } from "antd";
 import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 const optionsModels = [
   {
     label: "Animagine-x1-3",
-    value: "1",
+    value: "Animagine-x1-3",
   },
   {
     label: "Stable-Diffusion",
-    value: "2",
+    value: "Stable-Diffusion",
   },
 ];
 async function create(prompt, model) {
@@ -71,7 +72,7 @@ function blobUrlToFile(blobUrl) {
 export default function Page() {
   const [prompt, setPrompt] = useState();
   const [description, setDescription] = useState();
-  const [model, setModel] = useState("1");
+  const [model, setModel] = useState("Animagine-x1-3");
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [disableBtnUpdate, setDisableBtnUpdate] = useState(false);
@@ -107,12 +108,15 @@ export default function Page() {
     blobUrlToFile(imageUrl).then(async (file) => {
       if (file) {
         const formData = new FormData();
+        const username = Cookies.get("userName");
         formData.append("files.image", file);
         formData.append(
           "data",
           JSON.stringify({
             prompt: prompt,
             description: description,
+            createBy: username,
+            model: model,
           })
         );
         try {

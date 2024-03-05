@@ -22,6 +22,7 @@ export async function login(prevState, formData) {
     );
     if (response.data.jwt) {
       cookies().set("token", response.data.jwt);
+      cookies().set("userName", response.data.user.username);
     }
   } catch (error) {
     let errorMessage = "";

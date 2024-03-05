@@ -82,6 +82,10 @@ export default function Page() {
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  };
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="container mx-auto max-w-7xl px-6 lg:px-8">
@@ -89,9 +93,7 @@ export default function Page() {
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Feed
           </h2>
-          <p className="mt-2 text-lg leading-8 text-gray-600">
-            
-          </p>
+          <p className="mt-2 text-lg leading-8 text-gray-600"></p>
         </div>
         <div className="grid grid-cols-4 gap-2 mt-8">
           {blogState.map((datas, index) => (
@@ -174,10 +176,12 @@ export default function Page() {
                     <p className="font-semibold text-gray-900">
                       <a href="#">
                         <span className="absolute inset-0"></span>
-                        Michael Foster
+                        {datas.attributes.createBy.data?.attributes?.username}
                       </a>
                     </p>
-                    <p className="text-gray-600">Co-Founder / CTO</p>
+                    <p className="text-gray-600">
+                      {formatDate(datas.attributes.createdAt)}
+                    </p>
                   </div>
                 </div>
               </article>

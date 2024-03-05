@@ -5,14 +5,19 @@ import { UserOutlined } from "@ant-design/icons";
 import { Space } from "antd";
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     const token = Cookies.get("token");
+    const username = Cookies.get("userName");
+    setUserName(username);
     setIsLoggedIn(!!token);
   }, isLoggedIn);
 
   const handleLogout = () => {
     Cookies.remove("token");
+    Cookies.remove("userName");
+    setUserName("");
     setIsLoggedIn(false);
   };
 
@@ -28,6 +33,7 @@ const Navbar = () => {
           </a>
         </div>
         <div className="hidden md:flex">
+          <p className="text-white font-bold text-lg">{userName}</p>
           <Space>
             <a
               href="/user"
