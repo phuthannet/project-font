@@ -76,7 +76,7 @@ export async function getUserId() {
   }
 }
 
-export async function fetchBlog() {
+export async function fetchDatas() {
   const token = cookies().get("token");
   try {
     const res = await axios.get(

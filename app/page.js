@@ -9,8 +9,6 @@ export default function Page() {
   const [errorMessage, setErrorMessage] = useState();
   const [userFavId, setUserFavId] = useState([]);
   const [userId, setUserId] = useState([]);
-  const [inputText, setInputText] = useState("");
-  const [isClickHeart, setClickHeart] = useState(false);
 
   const initBlog = async () => {
     try {
