@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { updateHeartCount, getUserId, fetchBlog } from "./action";
+import { updateHeartCount, getUserId, fetchDatas } from "./action";
 import { Alert, Space, Input, Image, Button } from "antd";
 
 export default function Page() {
@@ -14,7 +14,7 @@ export default function Page() {
 
   const initBlog = async () => {
     try {
-      const result = await fetchBlog();
+      const result = await fetchDatas();
       const userId = await getUserId();
       setUserFavId(result);
       setBlogState(result);
@@ -86,19 +86,13 @@ export default function Page() {
 
   return (
     <div className="bg-white py-24 sm:py-32">
-      <div className="Input-Post">
-        <Button type="primary">Post</Button>
-        <Input type="text" value={inputText} placeholder="Enter text" />
-      </div>
       <div className="container mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Feed
           </h2>
           <p className="mt-2 text-lg leading-8 text-gray-600">
-            Our team of skilled artists specializes in digital illustrations,
-            photo manipulation, and abstract designs. We’re passionate about
-            pushing creative boundaries.
+            
           </p>
         </div>
         <div className="grid grid-cols-4 gap-2 mt-8">

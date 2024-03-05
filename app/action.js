@@ -80,7 +80,7 @@ export async function fetchBlog() {
   const token = cookies().get("token");
   try {
     const res = await axios.get(
-      `${process.env.STRAPI_BASE_URL}/api/histories?populate=*`,
+      `${process.env.STRAPI_BASE_URL}/api/histories?populate=*&sort[0]=createdAt:desc`,
       {
         headers: {
           Authorization: `Bearer ${token.value}`,
