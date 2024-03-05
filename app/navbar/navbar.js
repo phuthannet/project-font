@@ -41,7 +41,7 @@ const Navbar = () => {
                   href="/user"
                   className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
                 >
-                  <UserOutlined />
+                  <UserOutlined size="large" />
                 </a>
               </Space>
               <button
