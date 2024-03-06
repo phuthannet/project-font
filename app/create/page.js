@@ -1,8 +1,8 @@
 "use client";
+import { Alert, Image, Input, Radio, Space, Spin } from "antd";
 import axios from "axios";
-import { Image, Input, Radio, Spin, Space, Alert } from "antd";
-import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 const optionsModels = [
   {
     label: "Animagine-x1-3",
@@ -15,25 +15,28 @@ const optionsModels = [
 ];
 async function getUser() {
   const token = Cookies.get("token");
-  try {
-    const user = await axios.get(
-      "https://favorable-dawn-95d99e7a24.strapiapp.com/api/users/me?populate=*",
-      {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      }
-    );
-    console.log(user);
-    return user;
-  } catch (error) {
-    return error;
+  if (!token) {
+    return "Please login for upload";
+  } else {
+    try {
+      const user = await axios.get(
+        "https://favorable-dawn-95d99e7a24.strapiapp.com/api/users/me?populate=*",
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        }
+      );
+      return user;
+    } catch (error) {
+      return error;
+    }
   }
 }
 async function create(prompt, model) {
   try {
     let response;
-    if (model === "1") {
+    if (model === "Animagine-x1-3") {
       response = await axios.post(
         "https://api-inference.huggingface.co/models/cagliostrolab/animagine-xl-3.0",
         { inputs: prompt },
@@ -109,13 +112,17 @@ export default function Page() {
   };
 
   const handleSubmit = async () => {
-    await fetchData();
+    if (prompt) {
+      await fetchData();
+    } else {
+      setErrorMessage("Please fill out the prompt information");
+    }
   };
 
   const handleReset = () => {
     setPrompt();
     setDescription();
-    setModel("1");
+    setModel("Animagine-x1-3");
     setImageUrl(null);
     setDisableBtnUpdate(false);
   };
@@ -124,18 +131,23 @@ export default function Page() {
     if (imageUrl) { // ตรวจสอบว่ามี URL ของรูปภาพหรือไม่
       const link = document.createElement('a');
       link.href = imageUrl;
-      link.download = 'result_image.jpg';
+      link.download = "result_image.jpg";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
-  }
+  };
 
   const handleUpload = async () => {
     setDisableBtnUpdate(true);
     blobUrlToFile(imageUrl).then(async (file) => {
       if (file) {
         const user = await getUser();
+        if (user === "Please login for upload") {
+          setDisableBtnUpdate(false);
+          setErrorMessage(user);
+          throw "Please login for upload";
+        }
         const formData = new FormData();
         formData.append("files.image", file);
         formData.append(
@@ -143,7 +155,7 @@ export default function Page() {
           JSON.stringify({
             prompt: prompt,
             description: description,
-            createBy: user.data.id,
+            createBy: user?.data?.id,
             model: model,
           })
         );
@@ -165,7 +177,6 @@ export default function Page() {
             setErrorMessage("Failed to upload image!");
           }
         } catch (error) {
-          console.error("Error:", error);
           setErrorMessage("Failed to upload imagecatch!");
         }
       } else {
@@ -180,14 +191,12 @@ export default function Page() {
       const data = await create(prompt, model);
       setImageUrl(data);
     } catch (error) {
-      console.log("error");
       setErrorMessage(error);
     } finally {
       setLoading(false);
     }
   };
 
- 
   useEffect(() => {
     let timeoutId;
 
@@ -215,6 +224,7 @@ export default function Page() {
             </label>
             <div className="mt-2">
               <Input
+                required
                 type="text"
                 value={prompt}
                 onChange={handlePromptChange}
@@ -260,7 +270,7 @@ export default function Page() {
                   type="text"
                   value={description}
                   onChange={handleDescriptionChange}
-                  placeholder="Enter text"
+                  placeholder="Enter Description"
                 />
               </div>
             </div>
@@ -298,7 +308,7 @@ export default function Page() {
             )}
           </div>
           <div>
-          {imageUrl && (
+            {imageUrl && (
               <button
                 onClick={downLoadfile}
                 disabled={disableBtnUpdate}

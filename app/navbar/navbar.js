@@ -1,24 +1,36 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { UserOutlined } from "@ant-design/icons";
 import { Space } from "antd";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { checkOut, updateLoginStatus } from "./action";
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
 
+  const initNav = async () => {
+    try {
+      const result = await updateLoginStatus();
+      if (result.token) {
+        setIsLoggedIn(true);
+      }
+      setUserName(result.username);
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    const token = Cookies.get("token");
-    const username = Cookies.get("userName");
-    setUserName(username);
-    setIsLoggedIn(!!token);
-  }, isLoggedIn);
+    const fetchNav = async () => {
+      await initNav();
+    };
+    fetchNav();
+  }, [isLoggedIn, userName]);
 
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("userName");
     setUserName("");
     setIsLoggedIn(false);
+    checkOut();
   };
 
   return (
@@ -33,40 +45,43 @@ const Navbar = () => {
           </a>
         </div>
         <div className="hidden md:flex">
-          {isLoggedIn ? (
-            <>
-              <p className="text-white font-bold text-lg">{userName}</p>
-              <Space>
-                <a
-                  href="/user"
-                  className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
+          {
+            isLoggedIn && (
+              <>
+                <p className="text-white font-bold text-lg">{userName}</p>
+                <Space>
+                  <a
+                    href="/user"
+                    className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
+                  >
+                    <UserOutlined size="large" />
+                  </a>
+                </Space>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-red-600"
                 >
-                  <UserOutlined size="large" />
-                </a>
-              </Space>
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-red-600"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <div>
-              <a
-                href="/login"
-                className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
-              >
-                Login
-              </a>
-              <a
-                href="/register"
-                className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
-              >
-                Sign Up
-              </a>
-            </div>
-          )}
+                  Logout
+                </button>
+              </>
+            )
+            // ) : (
+            //   <div>
+            //     <a
+            //       href="/login"
+            //       className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
+            //     >
+            //       Login
+            //     </a>
+            //     <a
+            //       href="/register"
+            //       className="bg-blue-500 ml-4 py-2 px-6 text-white font-bold rounded-lg hover:bg-blue-600"
+            //     >
+            //       Sign Up
+            //     </a>
+            //   </div>
+            // )
+          }
         </div>
         <div className="md:hidden">
           <button className="text-gray-300 hover:text-white focus:outline-none">

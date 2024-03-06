@@ -1,11 +1,14 @@
 "use client";
 
-import { UserOutlined } from "@ant-design/icons";
+import { LoadingOutlined, UserOutlined } from "@ant-design/icons";
 import { Alert, Avatar, Image, Space, Spin } from "antd";
 import { useEffect, useState } from "react";
-import { fetchDatas, getUserId, updateHeartCount } from "./action";
+import {
+  fetchDatas,
+  getUserId,
+  updateHeartCount
+} from "./action";
 import Pagination from "./components/pagination";
-import { LoadingOutlined } from "@ant-design/icons";
 export default function Page() {
   const [blogState, setBlogState] = useState([]);
   const [heartCount, setheartCount] = useState();
@@ -19,7 +22,6 @@ export default function Page() {
   const initBlog = async () => {
     try {
       const result = await fetchDatas(currentPage);
-      console.log(result);
       const userId = await getUserId();
       setUserFavId(result.data);
       setBlogState(result.data);
@@ -30,9 +32,7 @@ export default function Page() {
           value.attributes.usersFav.data.some((id) => id.id === userId)
         )
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleHeartClick = async (index) => {
@@ -76,29 +76,28 @@ export default function Page() {
   }, [currentPage]);
 
   const handleSaveImageToDevice = async (imageUrl, fileName) => {
-    if (imageUrl) { // ตรวจสอบว่ามี URL ของรูปภาพหรือไม่
-        try {
-            const response = await fetch(imageUrl);
-            const blob = await response.blob();
-            const objectUrl = URL.createObjectURL(blob);
+    if (imageUrl) {
+      try {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
 
-            const link = document.createElement('a');
-            link.href = objectUrl;
-            link.download = fileName || 'result_image.jpg'; // ถ้าไม่ได้ระบุ fileName ให้ใช้ 'result_image.jpg' เป็นชื่อไฟล์
-            link.style.display = 'none'; // ซ่อนลิงก์
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        const link = document.createElement("a");
+        link.href = objectUrl;
+        link.download = fileName || "result_image.jpg";
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
-            // คืนค่า URL ที่สร้างขึ้น เมื่อไม่ต้องการใช้งานต่อ
-            URL.revokeObjectURL(objectUrl);
-        } catch (error) {
-            console.error("Error downloading image:", error);
-        }
+        URL.revokeObjectURL(objectUrl);
+      } catch (error) {
+
+      }
     } else {
-        console.error("No image URL provided.");
+
     }
-};
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -135,7 +134,7 @@ export default function Page() {
                     </h3>
                     <Image
                       className="mt-2"
-                      src={datas.attributes.image.data.attributes.url}
+                      src={datas.attributes.image.data?.attributes?.url}
                     />
                     <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">
                       {datas.attributes.description}
@@ -180,13 +179,13 @@ export default function Page() {
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
-                          stroke-width="1.5"
+                          strokeWidth="1.5"
                           stroke="currentColor"
                           className="w-6 h-6"
                         >
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
                           />
                         </svg>

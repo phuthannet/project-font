@@ -10,9 +10,6 @@ export async function login(prevState, formData) {
     const email = formData.get("email");
     const password = formData.get("password");
 
-    console.log("email", email);
-    console.log("password", password);
-
     const response = await axios.post(
       `${process.env.STRAPI_BASE_URL}/api/auth/local`,
       {
@@ -29,8 +26,7 @@ export async function login(prevState, formData) {
     if (error.response && error.response.data.error.message) {
       errorMessage = error.response.data.error.message;
     }
-    console.log(errorMessage);
     return { message: errorMessage || "Failed to create" };
   }
-  redirect("/");
+  return new redirect("/");
 }

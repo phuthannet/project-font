@@ -1,10 +1,9 @@
 "use client";
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import "./profile.css";
-import Cookies from "js-cookie";
-import { Upload, Button, Modal, Alert, Space, Spin } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { Alert, Button, Modal, Space, Spin, Upload } from "antd";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 
 const UpoloadAvatar = ({ id, username, profile, setisUserUpdated }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -65,9 +64,7 @@ const UpoloadAvatar = ({ id, username, profile, setisUserUpdated }) => {
       setSuccessMessage("Upload Successful");
       setModalVisible(false);
       setUploading(false);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const updateUserAvatarId = async (profile) => {
@@ -84,9 +81,7 @@ const UpoloadAvatar = ({ id, username, profile, setisUserUpdated }) => {
         }
       );
       setisUserUpdated(true);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
